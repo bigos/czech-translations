@@ -43,7 +43,6 @@
                                ("NBK" "New Bible of Kralice (CZ) (2002 - only NT)")
                                ("NBK06" "New Bible of Kralice (CZ) (2006)")
                                ("B21" "Bible 21 (CZ)")
-                               ("JB" "The Jerusalem Bible (working version) (CZ)")
                                ("PNS" "New World Translation of the Holy Scriptures")
                                ("NK" "New Covenant")
                                ("COL" "New Testament - Dr. Rudolf Col (1947)")
