@@ -25,7 +25,10 @@
 (defun zzz ()
   (let ((translation-code)
         (book-chapters)
-        (translation-name))
+        (translation-name)
+        (book-code)
+        (max-chapter)
+        (chapter))
     (dolist (tran *translations*)
       (setq translation-code (nth 0 tran)
             book-chapters    (nth 1 tran)
@@ -34,7 +37,8 @@
       (loop
          for bx from 0 to (1- (list-length book-chapters)) by 2
          do
-           (princ (nth bx book-chapters))
-           (princ (nth (1+ bx) book-chapters))
-           (princ " ")
+           (setq book-code (nth bx book-chapters))
+           (setq max-chapter (nth (1+ bx) book-chapters))
+           (dotimes (chapter max-chapter)
+             (format t "~&~s ~s ~s~% " translation-code book-code (1+ chapter)))
            ))))
