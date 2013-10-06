@@ -5,26 +5,24 @@
 
 (format t "~&~S~%" *translations*)
 
-(defun run ( translation book chapter)
+(defun download ( translation book chapter)
   (let* ((downloaded
           (drakma:http-request
            (format nil "http://www.obohu.cz/bible/index.php?~a&~a&~d"
                    (format nil "styl=~a" translation)
                    (format nil "k=~a" book)
-                   (format nil "kap=~a" chapter))))
+                   (format nil "kap=~a" chapter))
+           :external-format-in :UTF-8 ))
          (parsed (html-parse:parse-html downloaded)))
     ;;the line below extracts text of the chapter
     ;;(nth 6 (nth 2 (nth 2 (cadr parsed))))
-     downloaded
-    ))
+     downloaded))
 
 ;; you can run it like this: (run "JB" "J" 1)
-
 
 (defun downloaded-path (tran book chapter)
   (merge-pathnames (format nil "downloaded/~a/~a/~a" tran book chapter)
                    *default-pathname-defaults*))
-
 
 (defun zzz ()
   (let ((translation-code)
@@ -52,6 +50,6 @@
                 (ensure-directories-exist downloaded-page)
                 (format t "~s ~s ~s  " translation-code book-code chapter)
                 (with-open-file (stream downloaded-page :direction :output)
-                  (format stream "~a" (run translation-code book-code chapter)))
+                  (format stream "~a" (download translation-code book-code chapter)))
                 )
            ))))
