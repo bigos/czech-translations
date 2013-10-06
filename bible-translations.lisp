@@ -20,7 +20,8 @@
 
 
 (defun downloaded-folder (tran book)
-  (merge-pathnames (format nil "downloaded/~a/~a" tran book) *default-pathname-defaults*))
+  (merge-pathnames (format nil "downloaded/~a/~a/" tran book) *default-pathname-defaults*))
+
 
 (defun zzz ()
   (let ((translation-code)
@@ -39,6 +40,9 @@
            (setq book-code (nth bx book-chapters))
            (setq max-chapter (nth (1+ bx) book-chapters))
            (format t "~%")
-           (dotimes (chapter max-chapter)
-             (format t "~s ~s ~s  " translation-code book-code (1+ chapter)))
+           (loop for chapter from 1 to max-chapter
+              do
+                (ensure-directories-exist
+                 (downloaded-folder translation-code book-code))
+                (format t "~s ~s ~s  " translation-code book-code chapter))
            ))))
