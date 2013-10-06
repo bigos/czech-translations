@@ -27,8 +27,7 @@
         (book-chapters)
         (translation-name)
         (book-code)
-        (max-chapter)
-        (chapter))
+        (max-chapter))
     (dolist (tran *translations*)
       (setq translation-code (nth 0 tran)
             book-chapters    (nth 1 tran)
@@ -39,6 +38,7 @@
          do
            (setq book-code (nth bx book-chapters))
            (setq max-chapter (nth (1+ bx) book-chapters))
+           (format t "~%")
            (dotimes (chapter max-chapter)
-             (format t "~&~s ~s ~s~% " translation-code book-code (1+ chapter)))
+             (format t "~s ~s ~s  " translation-code book-code (1+ chapter)))
            ))))
