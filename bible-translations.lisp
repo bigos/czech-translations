@@ -14,13 +14,16 @@
                    (format nil "kap=~a" chapter))))
          (parsed (html-parse:parse-html downloaded)))
     ;;the line below extracts text of the chapter
-    (nth 6 (nth 2 (nth 2 (cadr parsed))))))
+    ;;(nth 6 (nth 2 (nth 2 (cadr parsed))))
+     downloaded
+    ))
 
 ;; you can run it like this: (run "JB" "J" 1)
 
 
-(defun downloaded-folder (tran book)
-  (merge-pathnames (format nil "downloaded/~a/~a/" tran book) *default-pathname-defaults*))
+(defun downloaded-path (tran book chapter)
+  (merge-pathnames (format nil "downloaded/~a/~a/~a" tran book chapter)
+                   *default-pathname-defaults*))
 
 
 (defun zzz ()
@@ -28,7 +31,8 @@
         (book-chapters)
         (translation-name)
         (book-code)
-        (max-chapter))
+        (max-chapter)
+        (downloaded-page))
     (dolist (tran *translations*)
       (setq translation-code (nth 0 tran)
             book-chapters    (nth 1 tran)
@@ -42,7 +46,12 @@
            (format t "~%")
            (loop for chapter from 1 to max-chapter
               do
-                (ensure-directories-exist
-                 (downloaded-folder translation-code book-code))
-                (format t "~s ~s ~s  " translation-code book-code chapter))
+                (sleep 1)
+                (setq downloaded-page
+                      (downloaded-path translation-code book-code chapter))
+                (ensure-directories-exist downloaded-page)
+                (format t "~s ~s ~s  " translation-code book-code chapter)
+                (with-open-file (stream downloaded-page :direction :output)
+                  (format stream "~a" (run translation-code book-code chapter)))
+                )
            ))))
