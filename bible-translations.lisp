@@ -23,6 +23,15 @@
 (defun downloaded-path (tran book chapter)
   (merge-pathnames (format nil "downloaded/~a/~a/~a" tran book chapter)
                    *default-pathname-defaults*))
+(defun chapter-path (folder tran book chapter)
+  (merge-pathnames (format nil "~a/~a/~a/~a" folder tran book chapter)
+                   *default-pathname-defaults*))
+
+(defun each-translation ()
+  (dolist (tran *translations*)
+    (let ((setq translation-code (nth 0 tran)
+                book-chapters    (nth 1 tran)
+                translation-name (nth 2 tran))))))
 
 (defun zzz ()
   (let ((translation-code)
