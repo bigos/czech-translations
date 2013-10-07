@@ -24,6 +24,9 @@
   (merge-pathnames (format nil "downloaded/~a/~a/~a" tran book chapter)
                    *default-pathname-defaults*))
 
+;; (defun parsed-path (tran book chapter)
+;;         (merge-pathnames (format nil "parsed/~a/~a/~a" tran book chapter)))
+
 (defun zzz ()
   (let ((translation-code)
         (book-chapters)
