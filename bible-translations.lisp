@@ -110,6 +110,12 @@
 
   (defun walk-results () result))
 
+;; use the above code like this
+;; (progn
+;;   (my-init)
+;;   (walk (print-parsed))
+;;   (walk-results))
+
 (defun genesis-1 ()
   (loop for x in (each-translation-book-chapter)
      when (and (equal (nth 1 x) "Gn")
