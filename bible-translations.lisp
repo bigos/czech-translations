@@ -53,6 +53,44 @@
                                            (1+ zchapter))))))))
     results))
 
+(defun sample-parsed ()
+  (:!DOCTYPE
+   " html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"")
+  ((:HTML :XMLNS "http://www.w3.org/1999/xhtml")
+   (:HEAD
+    ((:META :HTTP-EQUIV "Content-Type" :CONTENT "text/html; charset=utf-8"))
+    ((:META :HTTP-EQUIV "language" :CONTENT "CZ"))
+    ((:META :NAME "Author" :CONTENT))
+    ((:META :NAME "viewport" :CONTENT
+            "initial-scale=1, maximum-scale=1, user-scalable=no"))
+    ((:SCRIPT :LANGUAGE "JavaScript" :CHARSET "utf-8" :SRC "tooltip.js"))
+    ((:STYLE :TYPE "text/css" :MEDIA "all"))
+    ((:LINK :REL "stylesheet" :TYPE "text/css" :HREF "style.css"))
+    ((:SCRIPT :SRC "ajax.js" :TYPE "text/javascript"))
+    ((:SCRIPT :TYPE "text/javascript" :SRC "styleswitcher.js"))
+    ((:LINK :REL "alternate stylesheet" :TYPE "text/css" :HREF "css/nula.css"
+            :TITLE "normal"))
+    (:TITLE
+     "New World"))
+   ((:BODY :BGCOLOR "#FFFFFF" :TEXT "#000000" :LINK "#FF0000" :VLINK "#804000"
+           :ALINK "#B55515" :LEFTMARGIN "20" :TOPMARGIN "5" :RIGHTMARGIN "20"
+           :BOTTOMMARGIN "10" :MARGINWIDTH "20")
+    ((:DIV :ALIGN "center")
+     ((:DIV :ALIGN "center")
+      ((:DIV :ID "nadpisyknih")
+       ((:SPAN :CLASS "nazev_knih")
+        "New World"))))
+    ((:DIV :ALIGN "center")
+     ((:DIV :ID "blok_versu")
+      "A viděl jsem nové nebe" (:SUP "1")
+      " a novou zemi," (:SUP "2") " neboť dřívější nebe" (:SUP "3")
+      " a dřívější země" (:SUP "4") " pominuly a moře" (:SUP "5") " již není. "
+
+      "&nbsp;" ((:SPAN :CLASS "cisloverse") "2") "Viděl jsem také svaté město"
+      (:SUP "1") ", Nový Jeruzalém, jak sestupuje z nebe od Boha" (:SUP "2")
+      " a " (:EM "je") " připravený jako nevěsta" (:SUP "3")
+      " ozdobená pro svého manžela.")))))
+
 (defun genesis-1 ()
   (loop for x in (each-translation-book-chapter)
      when (and (equal (nth 1 x) "Gn")
