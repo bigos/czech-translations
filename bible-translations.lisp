@@ -23,9 +23,24 @@
 (defun downloaded-path (tran book chapter)
   (merge-pathnames (format nil "downloaded/~a/~a/~a" tran book chapter)
                    *default-pathname-defaults*))
+
 (defun chapter-path (folder tran book chapter)
   (merge-pathnames (format nil "~a/~a/~a/~a" folder tran book chapter)
                    *default-pathname-defaults*))
+
+(defun chapter-path (folder arglist)
+  (merge-pathnames (format nil "~a/~a/~a/~a" folder
+                           (nth 0 arglist)
+                           (nth 1 arglist)
+                           (nth 2 arglist))
+                   *default-pathname-defaults*))
+
+(defun print-parsed ()
+  "unfinished experimental code"
+  (let* ((ch '("PNS" "Zj" 21))
+         (downloaded (chapter-path "downloaded" ch)))
+    (with-open-file (stream downloaded)
+      (html-parse:parse-html stream))))
 
 (defun each-translation-book-chapter ()
   (let ((results))
@@ -38,8 +53,22 @@
                                            (1+ zchapter))))))))
     results))
 
-;; (defun parsed-path (tran book chapter)
-;;         (merge-pathnames (format nil "parsed/~a/~a/~a" tran book chapter)))
+(defun genesis-1 ()
+  (loop for x in (each-translation-book-chapter)
+     when (and (equal (nth 1 x) "Gn")
+               (eq (nth 2 x) 1))
+     collect x))
+
+(defun revelation-21 ()
+  (loop for x in (each-translation-book-chapter)
+     when (and (equal (nth 1 x) "Zj")
+               (eq (nth 2 x) 21))
+     collect x))
+
+(defun translation-books (translation)
+  (loop for x in (each-translation-book-chapter)
+     when (equal (nth 0 x) translation)
+     collect x))
 
 (defun zzz ()
   (let ((translation-code)
