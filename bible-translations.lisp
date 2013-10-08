@@ -91,12 +91,24 @@
        " a " (:EM "je") " připravený jako nevěsta" (:SUP "3")
        " ozdobená pro svého manžela."))))))
 
-(defun walk (x)
-  (let ((head (car x))
-        (tail (cdr x)))
-    (format T "~&>>> ~a ~%" x)
-    (when (listp head) (walk head))
-    (when tail (walk tail))))
+(let ((result) (count))
+  (defun my-init ()
+    (setq result nil count 0))
+
+  (defun stats ()
+    (format t "~&result ~S~%count ~d~%~%" result count))
+
+  (defun walk (x)
+    (let ((head (car x))
+          (tail (cdr x)))
+      (incf count)
+      (if (equalp (car x) '(:DIV :ID "blok_versu"))
+          (setf result (nconc result x))
+          (progn
+            (when (listp head) (walk head))
+            (when tail (walk tail))))))
+
+  (defun walk-results () result))
 
 (defun genesis-1 ()
   (loop for x in (each-translation-book-chapter)
