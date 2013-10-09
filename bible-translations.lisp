@@ -24,10 +24,6 @@
   (merge-pathnames (format nil "downloaded/~a/~a/~a" tran book chapter)
                    *default-pathname-defaults*))
 
-(defun chapter-path (folder tran book chapter)
-  (merge-pathnames (format nil "~a/~a/~a/~a" folder tran book chapter)
-                   *default-pathname-defaults*))
-
 (defun chapter-path (folder arglist)
   (merge-pathnames (format nil "~a/~a/~a/~a" folder
                            (nth 0 arglist)
@@ -87,6 +83,16 @@
 ;; getting beginning (subseq) of Revelation 21 in every translation
 ;; (dolist  (b (revelation-21))
 ;;   (format t "~S ~S~%~%~%" (car b)  (subseq (walk-tree (print-parsed b)) 0 10)))
+
+(defun extract-text ()
+  (let
+      ((saved))
+    (dolist  (b (each-translation-book-chapter))
+      (format t "~S  ~S~%" (nth 0 b) (nth 1 b))
+      (setq saved (chapter-path "extracted" b))
+      (ensure-directories-exist saved)
+      (with-open-file (stream saved :direction :output )
+        (format stream "~A" (walk-tree (print-parsed b)))))))
 
 (defun translation-books (translation)
   (loop for x in (each-translation-book-chapter)
