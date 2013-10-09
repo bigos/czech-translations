@@ -93,12 +93,20 @@
       (with-open-file (stream saved :direction :output )
         (format stream "'~S" (walk-tree (print-parsed b)))))))
 
+(defun try-extracted ()
+  (let ((extracted-path) (try-path) (x))
+    (dolist (b (subseq (each-translation-book-chapter) 0 2))
+      (setq extracted-path (chapter-path "extracted-path" b)
+            try-path (chapter-path "try" b))
+      (with-open-file (in-stream extracted-path)
+        (setq x (lml2 in-stream))) ;todo
+      (with-open-file (out-stream try-path :direction :output)
+        (format out-stream "~a" x)))))
+
 (defun verify-extracted ()
   (let ((extracted-path) (extracted) (fragment))
     (dolist (b (subseq (each-translation-book-chapter) 0 2))
       (setq extracted-path (chapter-path "extracted" b))
-                                        ;(princ extracted-path)
-                                        ;(princ #\newline)
       (with-open-file (stream extracted-path)
         (setq extracted (read stream)))
       (setq fragment (subseq extracted 0 2))

@@ -1,5 +1,4 @@
 ;;;; package.lisp
 
 (defpackage #:bible-translations
-  (:use #:cl))
-
+  (:use #:cl #:lml2))

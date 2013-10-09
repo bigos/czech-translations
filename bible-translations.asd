@@ -5,7 +5,7 @@
   :description "Describe bible-translations here"
   :author "Your Name <your.name@example.com>"
   :license "Specify license here"
-  :depends-on (#:drakma #:cl-html-parse #:cl-fad)
+  :depends-on (#:drakma #:cl-html-parse #:cl-fad #:lml2)
   :components ((:file "package")
                (:file "booksets")
                (:file "bible-translations")))
