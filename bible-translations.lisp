@@ -96,12 +96,13 @@
 (defun try-extracted ()
   (let ((extracted-path) (try-path) (x))
     (dolist (b (subseq (each-translation-book-chapter) 0 2))
-      (setq extracted-path (chapter-path "extracted-path" b)
+      (setq extracted-path (chapter-path "extracted" b)
             try-path (chapter-path "try" b))
       (with-open-file (in-stream extracted-path)
-        (setq x (lml2 in-stream))) ;todo
+        (setq x (read in-stream))) ;todo
+      (ensure-directories-exist try-path)
       (with-open-file (out-stream try-path :direction :output)
-        (format out-stream "~a" x)))))
+        (lml2:html-print '(:i "1 2 3") out-stream)))))
 
 (defun verify-extracted ()
   (let ((extracted-path) (extracted) (fragment))
