@@ -85,14 +85,24 @@
 ;;   (format t "~S ~S~%~%~%" (car b)  (subseq (walk-tree (print-parsed b)) 0 10)))
 
 (defun extract-text ()
-  (let
-      ((saved))
+  (let ((saved))
     (dolist  (b (each-translation-book-chapter))
       (format t "~S  ~S~%" (nth 0 b) (nth 1 b))
       (setq saved (chapter-path "extracted" b))
       (ensure-directories-exist saved)
       (with-open-file (stream saved :direction :output )
-        (format stream "~A" (walk-tree (print-parsed b)))))))
+        (format stream "'~S" (walk-tree (print-parsed b)))))))
+
+(defun verify-extracted ()
+  (let ((extracted-path) (extracted))
+    (dolist (b (subseq (each-translation-book-chapter) 0 1))
+      (setq extracted-path (chapter-path "extracted" b))
+      (princ extracted-path)
+      (princ #\newline)
+      (with-open-file (stream extracted-path)
+        (setq extracted (read stream)))
+      (princ extracted)
+      )))
 
 (defun translation-books (translation)
   (loop for x in (each-translation-book-chapter)
