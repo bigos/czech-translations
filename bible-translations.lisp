@@ -93,9 +93,9 @@
       (with-open-file (stream saved :direction :output )
         (format stream "'~S" (walk-tree (print-parsed b)))))))
 
-(defun verify-extracted ()
+(defun verify-extracted (fun args)
   (let ((extracted-path) (extracted) (fragment))
-    (dolist (b (subseq (each-translation-book-chapter) 0  ))
+    (dolist (b (subseq (each-translation-book-chapter) 0 2))
       (setq extracted-path (chapter-path "extracted" b))
       ;(princ extracted-path)
       ;(princ #\newline)
@@ -103,10 +103,10 @@
         (setq extracted (read stream)))
       (setq fragment (subseq extracted 0 2))
       ;(format t "~&>>> ~S~%" (caadr fragment))
+      (apply fun args)
       (if (equal (caadr fragment)
                  '(:DIV :ID "blok_versu"))
-          (princ #\T)
-          (princ #\-)))))
+          (princ #\T) (princ #\-)))))
 
 
 (defun translation-books (translation)
