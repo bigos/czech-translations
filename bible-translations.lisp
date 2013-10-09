@@ -102,7 +102,7 @@
         (setq x (read in-stream))) ;todo
       (ensure-directories-exist try-path)
       (with-open-file (out-stream try-path :direction :output)
-        (lml2:html-print '(:i "1 2 3") out-stream)))))
+        (lml2:html-print (eval x) out-stream)))))
 
 (defun verify-extracted ()
   (let ((extracted-path) (extracted) (fragment))
