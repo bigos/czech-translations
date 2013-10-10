@@ -93,6 +93,11 @@
       (with-open-file (stream saved :direction :output )
         (format stream "'~S" (walk-tree (print-parsed b)))))))
 
+(defun translation-data (code)
+  (loop for tr in *translations*
+     when (equalp code (car tr))
+     return  tr))
+
 (defun create-html  (extracted preklad kniha kapitola)
   `(:html (:head
            ((:META :HTTP-EQUIV "Content-Type"
@@ -111,9 +116,9 @@
                          preklad
                          kniha
                          kapitola))
+           (:hr)
            ,(eval extracted))
-          (:hr))
-  )
+          (:hr)))
 
 (defun try-extracted ()
   (let ((extracted-path) (try-path) (extracted) (preklad) (kniha) (kapitola))
@@ -126,7 +131,7 @@
       (with-open-file (in-stream extracted-path)
         (setq extracted (read in-stream))) ;todo
       (ensure-directories-exist try-path)
-      (with-open-file (out-stream try-path :direction :output)
+      (with-open-file (out-stream try-path :direction :output  :if-exists :supersede)
         (lml2:html-print
          (create-html extracted preklad kniha kapitola)
          out-stream)))))
