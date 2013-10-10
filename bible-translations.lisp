@@ -138,8 +138,8 @@
             ))
           (:body
            (:h3 ,(format nil "~a" (third tr)))
-           ,@(loop for x from 1 to 5
-                  collecting x)
+           ,@(loop for book in second (tr)
+                  collecting (car book))
            (:hr)
            ,(translation-indexes))))
 
