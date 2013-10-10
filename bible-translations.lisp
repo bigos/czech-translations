@@ -94,15 +94,38 @@
         (format stream "'~S" (walk-tree (print-parsed b)))))))
 
 (defun try-extracted ()
-  (let ((extracted-path) (try-path) (x))
+  (let ((extracted-path) (try-path) (x) (preklad) (kniha) (kapitola))
     (dolist (b (subseq (each-translation-book-chapter) 0 2))
+      (setq preklad (first b)
+            kniha (second b)
+            kapitola (third b) )
       (setq extracted-path (chapter-path "extracted" b)
             try-path (chapter-path "try" b))
       (with-open-file (in-stream extracted-path)
-        (setq x (read in-stream))) ;todo
+        (setq x (read in-stream)))      ;todo
       (ensure-directories-exist try-path)
       (with-open-file (out-stream try-path :direction :output)
-        (lml2:html-print (eval x) out-stream)))))
+        (lml2:html-print
+         `(:html (:head
+                  ((:META :HTTP-EQUIV "Content-Type"
+                          :CONTENT "text/html; charset=utf-8"))
+                  ((:STYLE :TYPE "text/css")
+                   "body{} .cisloverse{color:green; padding-right:0.5em;}")
+                  ((:LINK :REL "stylesheet" :TYPE "text/css"
+                          :HREF "../../style.css"))
+                  (:TITLE
+                   ,(format nil "preklad ~a kniha ~a kapitola ~a"
+                            preklad
+                            kniha
+                            kapitola)))
+                 (:body
+                   (:h1 ,(format nil "preklad ~a kniha ~a kapitola ~a"
+                                   preklad
+                                   kniha
+                                   kapitola)
+                          )
+                  ,(eval x)))
+         out-stream)))))
 
 (defun verify-extracted ()
   (let ((extracted-path) (extracted) (fragment))
