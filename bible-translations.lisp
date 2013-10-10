@@ -107,8 +107,8 @@
            ((:LINK :REL "stylesheet" :TYPE "text/css"
                    :HREF "../../style.css"))
            (:TITLE
-            ,(format nil "preklad ~a kniha ~a kapitola ~a"
-                     preklad
+            ,(format nil "~a  - kniha ~a - kapitola ~a"
+                     (third (translation-data preklad))
                      kniha
                      kapitola)))
           (:body
@@ -122,7 +122,7 @@
 
 (defun try-extracted ()
   (let ((extracted-path) (try-path) (extracted) (preklad) (kniha) (kapitola))
-    (dolist (b (subseq (each-translation-book-chapter) 0 ))
+    (dolist (b (subseq (each-translation-book-chapter) 0 2))
       (setq preklad (first b)
             kniha (second b)
             kapitola (third b) )
@@ -131,7 +131,9 @@
       (with-open-file (in-stream extracted-path)
         (setq extracted (read in-stream))) ;todo
       (ensure-directories-exist try-path)
-      (with-open-file (out-stream try-path :direction :output  :if-exists :supersede)
+      (with-open-file (out-stream try-path
+                      :direction :output
+                      :if-exists :supersede)
         (lml2:html-print
          (create-html extracted preklad kniha kapitola)
          out-stream)))))
