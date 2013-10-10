@@ -122,11 +122,42 @@
            ,(eval extracted))
           (:hr)))
 
+(defun get-book-indexes (tr)
+  (with-output-to-string (res)
+    (dolist (book (second tr))
+      (format res "~a   "   (third book))
+      )))
+
+(defun translation-indexes ()
+  "zzzzzzzzzzzzzzzzzzzzzzzzzz")
+
+(defun create-index-file (tr)
+  `(:html (:head
+           ((:META :HTTP-EQUIV "Content-Type"
+                   :CONTENT "text/html; charset=utf-8"))
+           ((:LINK :REL "stylesheet" :TYPE "text/css"
+                   :HREF "../../style.css"))
+           (:TITLE
+            ,(format nil "Index - ~a" (third tr))
+            ))
+          (:body
+           (:h3 ,(format nil "~a" (third tr)))
+           ,(get-book-indexes tr)
+           (:hr)
+           ,(translation-indexes))))
+
 (defun create-indexes ()
-  (let ((index-file))
-      (dolist (tr *translations*)
-        (format t "~s ~s~%~%" (car tr) (third tr))
-        )))
+  (let ((index-file) )
+    (dolist (tr *translations*)
+      (format t "~s ~s~%~%" (first tr) (third tr))
+      (setq index-file (format nil "try/index_~a.html"
+                               (string-downcase (first tr))))
+      (with-open-file (stream (merge-pathnames
+                               index-file
+                               *default-pathname-defaults*)
+                              :direction :output
+                              :if-exists :supersede)
+        (lml2:html-print (create-index-file tr) stream)))))
 
 (defun try-extracted ()
   (let ((extracted-path) (try-path) (extracted) (preklad) (kniha) (kapitola))
@@ -135,13 +166,13 @@
             kniha (second b)
             kapitola (third b) )
       (setq extracted-path (chapter-path "extracted" b)
-            try-path (chapter-path "try" b))
+            try-path (chapter-path "try" b ".html"))
       (with-open-file (in-stream extracted-path)
         (setq extracted (read in-stream))) ;todo
       (ensure-directories-exist try-path)
       (with-open-file (out-stream try-path
-                      :direction :output
-                      :if-exists :supersede)
+                                  :direction :output
+                                  :if-exists :supersede)
         (lml2:html-print
          (create-html extracted preklad kniha kapitola)
          out-stream)))))
