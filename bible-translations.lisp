@@ -100,6 +100,11 @@
      when (equalp code (car tr))
      return  tr))
 
+(defun book-nw-name (book-code)
+  (loop for bk in *catholic-books*
+     when (equalp book-code (car bk))
+     return (third bk)))
+
 (defun create-html  (extracted preklad kniha kapitola)
   `(:html (:head
            ((:META :HTTP-EQUIV "Content-Type"
@@ -114,10 +119,11 @@
                      kniha
                      kapitola)))
           (:body
-           (:h1 ,(format nil "preklad ~a kniha ~a kapitola ~a"
-                         preklad
-                         kniha
-                         kapitola))
+           (:h1 ((:a :href ,(format nil "../../index_~a.html" (string-downcase preklad)))
+                  ,(format nil "preklad ~a kniha ~a kapitola ~a"
+                          preklad
+                          (book-nw-name kniha)
+                          kapitola)))
            (:hr)
            ,(eval extracted))
           (:hr)
@@ -211,10 +217,6 @@
       (if (equal (caadr fragment)
                  '(:DIV :ID "blok_versu"))
           (princ #\T) (princ #\-)))))
-
-
-(defmacro every-extracted (body)
-  `(funcall ,body ))
 
 (defun translation-books (translation)
   (loop for x in (each-translation-book-chapter)
