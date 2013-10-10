@@ -120,15 +120,27 @@
                          kapitola))
            (:hr)
            ,(eval extracted))
-          (:hr)))
+          (:hr)
+          ((:div :class "other_translations")
+           ,@(same-chapter-links kniha kapitola)
+           )))
 
 
+(defun same-chapter-links (bk ch)
+  (let ((path)
+        (tr-codes
+         (loop for tr in *translations*
+            collecting (car tr))))
+    (loop for tc in tr-codes
+       do
+         (setq path (format nil "~a/~a/~a.html" tc bk ch ))
+       when (probe-file (merge-pathnames (format nil "extracted/~a/~a/~a" tc bk ch)))
+       collect (format nil "<a href=\"../../~a\">~a</a>"  path tc))))
 
 (defun translation-indexes ()
   (let ((tr-codes
          (loop for tr in *translations*
             collecting (car tr))))
-
     (loop for tc in tr-codes
        collecting (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc))))
 
