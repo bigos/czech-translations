@@ -172,7 +172,7 @@
 
 (defun try-extracted ()
   (let ((extracted-path) (try-path) (extracted) (preklad) (kniha) (kapitola))
-    (dolist (b (subseq (each-translation-book-chapter) 0 2))
+    (dolist (b (subseq (each-translation-book-chapter) 0 ))
       (setq preklad (first b)
             kniha (second b)
             kapitola (third b) )
