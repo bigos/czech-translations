@@ -122,11 +122,7 @@
            ,(eval extracted))
           (:hr)))
 
-(defun get-book-indexes (tr)
-  (with-output-to-string (res)
-    (dolist (book (second tr))
-      (format res "~a   "   (third book))
-      )))
+
 
 (defun translation-indexes ()
   "zzzzzzzzzzzzzzzzzzzzzzzzzz")
@@ -142,7 +138,8 @@
             ))
           (:body
            (:h3 ,(format nil "~a" (third tr)))
-           ,(get-book-indexes tr)
+           ,@(loop for x from 1 to 5
+                  collecting x)
            (:hr)
            ,(translation-indexes))))
 
