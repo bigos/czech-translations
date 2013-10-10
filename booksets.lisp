@@ -48,6 +48,6 @@
                                ("COL" ,*greek-scriptures* "New Testament - Dr. Rudolf Col (1947)")
                                ("HEJCL" ,*hebrew-catholic-books* "Dr. Jan Hejčl (1930) - Old Testament and Deuterocanonical books")
                                ("ROH" ,*canonical-books*  "Jozef Roháček Translation - Autorized Version Dušan Seberíni (SK)")
-                               ("SKP" ,*catholic-books*   "Slovak Catholic translation")
+                               ;("SKP" ,*catholic-books*   "Slovak Catholic translation")
                                ("SEP" ,*catholic-books*  "Slovak ecumenical translation (2008)")
                                ("SEVP" ,*canonical-books* "Slovak Evangelical translation")))
