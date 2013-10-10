@@ -125,23 +125,37 @@
 
 
 (defun translation-indexes ()
-  "zzzzzzzzzzzzzzzzzzzzzzzzzz")
+  (let ((tr-codes
+         (loop for tr in *translations*
+            collecting (car tr))))
+
+    (loop for tc in tr-codes
+       collecting (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc))))
+
+(defun index-links (tr1 b c)
+(loop for x from 1 to c
+   collect (format nil "<a href=\"~a/~a/~a.html\"> ~A </a> " tr1 b x x)))
 
 (defun create-index-file (tr)
   `(:html (:head
            ((:META :HTTP-EQUIV "Content-Type"
                    :CONTENT "text/html; charset=utf-8"))
            ((:LINK :REL "stylesheet" :TYPE "text/css"
-                   :HREF "../../style.css"))
+                   :HREF "style.css"))
            (:TITLE
             ,(format nil "Index - ~a" (third tr))
             ))
           (:body
            (:h3 ,(format nil "~a" (third tr)))
            ,@(loop for book in (second tr)
-                collecting `(:h5 ,(third  book)))
+                collecting
+                  `(:div (:h5 ,(third  book)) ,@(index-links
+                                                 (first tr)
+                                                 (first book)
+                                                 (second book))))
            (:hr)
-           ,(translation-indexes))))
+           ((:div :class "other_translations")
+                 ,@(translation-indexes)))))
 
 (defun create-indexes ()
   (let ((index-file) )
