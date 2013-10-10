@@ -24,11 +24,13 @@
   (merge-pathnames (format nil "downloaded/~a/~a/~a" tran book chapter)
                    *default-pathname-defaults*))
 
-(defun chapter-path (folder arglist)
-  (merge-pathnames (format nil "~a/~a/~a/~a" folder
+(defun chapter-path (folder arglist &optional (suffix ""))
+  (merge-pathnames (format nil "~a/~a/~a/~a~a"
+                           folder
                            (nth 0 arglist)
                            (nth 1 arglist)
-                           (nth 2 arglist))
+                           (nth 2 arglist)
+                           suffix)
                    *default-pathname-defaults*))
 
 (defun print-parsed (ch)
@@ -119,6 +121,12 @@
            (:hr)
            ,(eval extracted))
           (:hr)))
+
+(defun create-indexes ()
+  (let ((index-file))
+      (dolist (tr *translations*)
+        (format t "~s ~s~%~%" (car tr) (third tr))
+        )))
 
 (defun try-extracted ()
   (let ((extracted-path) (try-path) (extracted) (preklad) (kniha) (kapitola))
