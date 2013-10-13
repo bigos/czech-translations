@@ -34,8 +34,6 @@
                    *default-pathname-defaults*))
 
 (defun print-parsed (ch)
-  "unfinished experimental code"
-  ;;(ch '("PNS" "Zj" 21))
   (let* ((downloaded (chapter-path "downloaded" ch)))
     (with-open-file (stream downloaded)
       (html-parse:parse-html stream))))
@@ -151,8 +149,8 @@
        collecting (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc))))
 
 (defun index-links (tr1 b c)
-(loop for x from 1 to c
-   collect (format nil "<a href=\"~a/~a/~a.html\"> ~A </a> " tr1 b x x)))
+  (loop for x from 1 to c
+     collect (format nil "<a href=\"~a/~a/~a.html\"> ~A </a> " tr1 b x x)))
 
 (defun create-index-file (tr)
   `(:html (:head
@@ -173,7 +171,7 @@
                                                  (second book))))
            (:hr)
            ((:div :class "other_translations")
-                 ,@(translation-indexes)))))
+            ,@(translation-indexes)))))
 
 (defun create-indexes ()
   (let ((index-file) )
@@ -197,7 +195,7 @@
       (setq extracted-path (chapter-path "extracted" b)
             try-path (chapter-path "try" b ".html"))
       (with-open-file (in-stream extracted-path)
-        (setq extracted (read in-stream))) ;todo
+        (setq extracted (read in-stream)))
       (ensure-directories-exist try-path)
       (with-open-file (out-stream try-path
                                   :direction :output
@@ -249,6 +247,6 @@
                 (ensure-directories-exist downloaded-page)
                 (format t "~s ~s ~s  " translation-code book-code chapter)
                 (with-open-file (stream downloaded-page :direction :output)
-                  (format stream "~a" (download translation-code book-code chapter)))
-                )
-           ))))
+                  (format stream
+                          "~a"
+                          (download translation-code book-code chapter))))))))
