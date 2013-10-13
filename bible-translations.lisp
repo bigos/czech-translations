@@ -126,10 +126,10 @@
            ,(eval extracted))
           (:hr)
           ((:div :class "other_translations")
-           ,@(same-chapter-links kniha kapitola))))
+           ,@(same-chapter-links kniha kapitola preklad))))
 
 
-(defun same-chapter-links (bk ch)
+(defun same-chapter-links (bk ch preklad)
   (let ((path)
         (tr-codes
          (loop for tr in *translations*
@@ -138,14 +138,18 @@
        do
          (setq path (format nil "~a/~a/~a.html" tc bk ch ))
        when (probe-file (merge-pathnames (format nil "extracted/~a/~a/~a" tc bk ch)))
-       collect (format nil "<a href=\"../../~a\">~a</a>"  path tc))))
+       collect (if (equalp preklad tc)
+                   (format nil "<a href=\"../../~a\" class=\"current\">~a</a>"  path tc)
+                   (format nil "<a href=\"../../~a\">~a</a>"  path tc)))))
 
-(defun translation-indexes ()
+(defun translation-indexes (preklad)
   (let ((tr-codes
          (loop for tr in *translations*
             collecting (car tr))))
     (loop for tc in tr-codes
-       collecting (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc))))
+       collecting (if (equalp preklad tc)
+                      (format nil "<a href=\"index_~a.html\" class=\"CURRENT\" >~a</a>" (string-downcase tc) tc)
+                      (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc)))))
 
 (defun index-links (tr1 b c)
   (loop for x from 1 to c
@@ -170,7 +174,7 @@
                                                  (second book))))
            (:hr)
            ((:div :class "other_translations")
-            ,@(translation-indexes)))))
+            ,@(translation-indexes (first tr))))))
 
 (defun create-indexes ()
   (let ((index-file) )
