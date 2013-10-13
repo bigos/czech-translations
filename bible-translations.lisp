@@ -126,8 +126,7 @@
            ,(eval extracted))
           (:hr)
           ((:div :class "other_translations")
-           ,@(same-chapter-links kniha kapitola)
-           )))
+           ,@(same-chapter-links kniha kapitola))))
 
 
 (defun same-chapter-links (bk ch)
