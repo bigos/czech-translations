@@ -6,17 +6,12 @@
 (format t "~&~S~%" *translations*)
 
 (defun download ( translation book chapter)
-  (let* ((downloaded
-          (drakma:http-request
-           (format nil "http://www.obohu.cz/bible/index.php?~a&~a&~d"
-                   (format nil "styl=~a" translation)
-                   (format nil "k=~a" book)
-                   (format nil "kap=~a" chapter))
-           :external-format-in :UTF-8 ))
-         (parsed (html-parse:parse-html downloaded)))
-    ;;the line below extracts text of the chapter
-    ;;(nth 6 (nth 2 (nth 2 (cadr parsed))))
-     downloaded))
+  (drakma:http-request
+   (format nil "http://www.obohu.cz/bible/index.php?~a&~a&~d"
+           (format nil "styl=~a" translation)
+           (format nil "k=~a" book)
+           (format nil "kap=~a" chapter))
+   :external-format-in :UTF-8 ))
 
 ;; you can run it like this: (run "JB" "J" 1)
 
