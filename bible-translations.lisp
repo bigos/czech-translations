@@ -252,3 +252,15 @@
                   (format stream "~a" (download translation-code book-code chapter)))
                 )
            ))))
+
+(defun copy-stylesheets ()
+  (with-open-file (from (merge-pathnames "style.css"))
+    (with-open-file (to (merge-pathnames "try/style.css")
+                        :direction :output
+                        :if-exists :supersede)
+      (cl-fad:copy-stream from to))))
+
+(defun main ()
+  (try-extracted)
+  (create-indexes)
+  (copy-stylesheets))
