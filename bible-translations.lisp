@@ -165,10 +165,19 @@
            (:h3 ,(format nil "~a" (third tr)))
            ,@(loop for book in (second tr)
                 collecting
-                  `(:div ((:a name ,(string-downcase (first book)))) (:h5 ,(third  book)) ,@(index-links
-                                                    (first tr)
-                                                    (first book)
-                                                    (second book))))
+                  `((:a :href ,(format nil "#~A"
+                                       (string-downcase (first book))))
+                    ,(third book) ", " ))
+           ,@(loop for book in (second tr)
+                collecting
+                  `(:div
+                    ((:a name ,(string-downcase (first book))))
+                    (:h5
+                     ((:a :href "#") "^")
+                     ,(third  book)) ,@(index-links
+                     (first tr)
+                     (first book)
+                     (second book))))
            (:hr)
            ((:div :class "other_translations")
             ,@(translation-indexes (first tr))))))
