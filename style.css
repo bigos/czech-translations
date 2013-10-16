@@ -15,16 +15,24 @@ display:none;
     display:none;
 }
 
+.other_translations{whitespace:wrap;
+                   }
 .other_translations a{ 
   color:red;
-  margin-right:1em;
-  
+  margin-right:1em;  
 }
+
+
 
 .current{
     font-weight:bold;
-    background:#ccc;
+    background:#eee;
     padding:0.25em;
 }
 
-h5{margin-bottom:0.25em;}
+h5{margin-bottom:0.25em;
+   background:#eee;
+  }
+
+.arrow-up a{color:green;
+         font-size:20px;}

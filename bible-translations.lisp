@@ -136,8 +136,8 @@
          (setq path (format nil "~a/~a/~a.html" tc bk ch ))
        when (probe-file (merge-pathnames (format nil "extracted/~a/~a/~a" tc bk ch)))
        collect (if (equalp preklad tc)
-                   (format nil "<a href=\"../../~a\" class=\"current\">~a</a>"  path tc)
-                   (format nil "<a href=\"../../~a\">~a</a>"  path tc)))))
+                   (format nil "<a href=\"../../~a\" class=\"current\">~a</a> "  path tc)
+                   (format nil "<a href=\"../../~a\">~a</a> "  path tc)))))
 
 (defun translation-indexes (preklad)
   (let ((tr-codes
@@ -145,8 +145,8 @@
             collecting (car tr))))
     (loop for tc in tr-codes
        collecting (if (equalp preklad tc)
-                      (format nil "<a href=\"index_~a.html\" class=\"CURRENT\" >~a</a>" (string-downcase tc) tc)
-                      (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc)))))
+                      (format nil "<a href=\"index_~a.html\" class=\"CURRENT\" >~a</a> " (string-downcase tc) tc)
+                      (format nil "<a href=\"index_~a.html\">~a</a> " (string-downcase tc) tc)))))
 
 (defun index-links (tr1 b c)
   (loop for x from 1 to c
@@ -169,13 +169,16 @@
                 collecting
                   `((:a :href ,(format nil "#~A"
                                        (string-downcase (first book))))
-                    ,(third book) ", " ))
+                    ,(cl-ppcre:regex-replace-all
+                      " "
+                      (third book)
+                      "&nbsp;") ", " ))
            ,@(loop for book in (second tr)
                 collecting
                   `(:div
                     ((:a name ,(string-downcase (first book))))
                     (:h5
-                     ((:a :href "#") "^")
+                     ((:span :class "arrow-up")  ((:a :href "#") "&#8593;"))
                      ,(third  book)) ,@(index-links
                      (first tr)
                      (first book)
