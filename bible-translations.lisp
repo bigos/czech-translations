@@ -250,12 +250,13 @@
 
 (defun copy-stylesheets ()
   (with-open-file (from (merge-pathnames "style.css"))
-    (with-open-file (to (merge-pathnames "try/style.css")
+    (with-open-file (to (ensure-directories-exist
+                         (merge-pathnames "try/style.css"))
                         :direction :output
                         :if-exists :supersede)
       (cl-fad:copy-stream from to))))
 
 (defun main ()
-  (try-extracted)
+  (copy-stylesheets)
   (create-indexes)
-  (copy-stylesheets))
+  (try-extracted))
