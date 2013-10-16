@@ -112,8 +112,10 @@
                      kniha
                      kapitola)))
           (:body
-           (:h1 ((:a :href ,(format nil "../../index_~a.html" (string-downcase preklad)))
-                  ,(format nil "preklad ~a kniha ~a kapitola ~a"
+           (:h1 ((:a :href ,(format nil "../../index_~a.html#~a"
+                                    (string-downcase preklad)
+                                    (string-downcase kniha)))
+                 ,(format nil "preklad ~a kniha ~a kapitola ~a"
                           preklad
                           (book-nw-name kniha)
                           kapitola)))
@@ -163,10 +165,10 @@
            (:h3 ,(format nil "~a" (third tr)))
            ,@(loop for book in (second tr)
                 collecting
-                  `(:div (:h5 ,(third  book)) ,@(index-links
-                                                 (first tr)
-                                                 (first book)
-                                                 (second book))))
+                  `(:div ((:a name ,(string-downcase (first book)))) (:h5 ,(third  book)) ,@(index-links
+                                                    (first tr)
+                                                    (first book)
+                                                    (second book))))
            (:hr)
            ((:div :class "other_translations")
             ,@(translation-indexes (first tr))))))
