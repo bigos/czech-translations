@@ -6,17 +6,12 @@
 (format t "~&~S~%" *translations*)
 
 (defun download ( translation book chapter)
-  (let* ((downloaded
-          (drakma:http-request
-           (format nil "http://www.obohu.cz/bible/index.php?~a&~a&~d"
-                   (format nil "styl=~a" translation)
-                   (format nil "k=~a" book)
-                   (format nil "kap=~a" chapter))
-           :external-format-in :UTF-8 ))
-         (parsed (html-parse:parse-html downloaded)))
-    ;;the line below extracts text of the chapter
-    ;;(nth 6 (nth 2 (nth 2 (cadr parsed))))
-     downloaded))
+  (drakma:http-request
+   (format nil "http://www.obohu.cz/bible/index.php?~a&~a&~d"
+           (format nil "styl=~a" translation)
+           (format nil "k=~a" book)
+           (format nil "kap=~a" chapter))
+   :external-format-in :UTF-8 ))
 
 ;; you can run it like this: (run "JB" "J" 1)
 
@@ -34,8 +29,6 @@
                    *default-pathname-defaults*))
 
 (defun print-parsed (ch)
-  "unfinished experimental code"
-  ;;(ch '("PNS" "Zj" 21))
   (let* ((downloaded (chapter-path "downloaded" ch)))
     (with-open-file (stream downloaded)
       (html-parse:parse-html stream))))
@@ -128,11 +121,10 @@
            ,(eval extracted))
           (:hr)
           ((:div :class "other_translations")
-           ,@(same-chapter-links kniha kapitola)
-           )))
+           ,@(same-chapter-links kniha kapitola preklad))))
 
 
-(defun same-chapter-links (bk ch)
+(defun same-chapter-links (bk ch preklad)
   (let ((path)
         (tr-codes
          (loop for tr in *translations*
@@ -141,18 +133,22 @@
        do
          (setq path (format nil "~a/~a/~a.html" tc bk ch ))
        when (probe-file (merge-pathnames (format nil "extracted/~a/~a/~a" tc bk ch)))
-       collect (format nil "<a href=\"../../~a\">~a</a>"  path tc))))
+       collect (if (equalp preklad tc)
+                   (format nil "<a href=\"../../~a\" class=\"current\">~a</a>"  path tc)
+                   (format nil "<a href=\"../../~a\">~a</a>"  path tc)))))
 
-(defun translation-indexes ()
+(defun translation-indexes (preklad)
   (let ((tr-codes
          (loop for tr in *translations*
             collecting (car tr))))
     (loop for tc in tr-codes
-       collecting (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc))))
+       collecting (if (equalp preklad tc)
+                      (format nil "<a href=\"index_~a.html\" class=\"CURRENT\" >~a</a>" (string-downcase tc) tc)
+                      (format nil "<a href=\"index_~a.html\">~a</a>" (string-downcase tc) tc)))))
 
 (defun index-links (tr1 b c)
-(loop for x from 1 to c
-   collect (format nil "<a href=\"~a/~a/~a.html\"> ~A </a> " tr1 b x x)))
+  (loop for x from 1 to c
+     collect (format nil "<a href=\"~a/~a/~a.html\"> ~A </a> " tr1 b x x)))
 
 (defun create-index-file (tr)
   `(:html (:head
@@ -173,7 +169,7 @@
                                                  (second book))))
            (:hr)
            ((:div :class "other_translations")
-                 ,@(translation-indexes)))))
+            ,@(translation-indexes (first tr))))))
 
 (defun create-indexes ()
   (let ((index-file) )
@@ -197,7 +193,7 @@
       (setq extracted-path (chapter-path "extracted" b)
             try-path (chapter-path "try" b ".html"))
       (with-open-file (in-stream extracted-path)
-        (setq extracted (read in-stream))) ;todo
+        (setq extracted (read in-stream)))
       (ensure-directories-exist try-path)
       (with-open-file (out-stream try-path
                                   :direction :output
@@ -249,9 +245,8 @@
                 (ensure-directories-exist downloaded-page)
                 (format t "~s ~s ~s  " translation-code book-code chapter)
                 (with-open-file (stream downloaded-page :direction :output)
-                  (format stream "~a" (download translation-code book-code chapter)))
-                )
-           ))))
+                  (format stream "~a"
+                          (download translation-code book-code chapter))))))))
 
 (defun copy-stylesheets ()
   (with-open-file (from (merge-pathnames "style.css"))
