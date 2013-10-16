@@ -163,6 +163,8 @@
             ))
           (:body
            (:h3 ,(format nil "~a" (third tr)))
+           ((:div :class "other_translations") ,@(translation-indexes (first tr)))
+           (:hr)
            ,@(loop for book in (second tr)
                 collecting
                   `((:a :href ,(format nil "#~A"
@@ -177,10 +179,7 @@
                      ,(third  book)) ,@(index-links
                      (first tr)
                      (first book)
-                     (second book))))
-           (:hr)
-           ((:div :class "other_translations")
-            ,@(translation-indexes (first tr))))))
+                     (second book)))))))
 
 (defun create-indexes ()
   (let ((index-file) )
